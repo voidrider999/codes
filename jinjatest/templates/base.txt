@@ -1,0 +1,3 @@
+Hello {{ user }}!
+{% block body %}{% endblock body %}
+Bye {{ user }}!
