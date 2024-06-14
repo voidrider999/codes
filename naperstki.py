@@ -1,4 +1,5 @@
 import random
+print(random.randint(0, 10000), 'Людей следят за игрой')
 names = ['Vlad', 'Nik', 'Sam', 'Johan']
 numplayers = int(input('Число игроков: '))
 players = []
@@ -10,13 +11,19 @@ for _ in range(numplayers):
 
 rounds = int(input('Число раундов: '))
 for _ in range(rounds):
+    print('*' * 20)
     for player in players:
-        print(player)
-        number = random.randint(0, 3)
-        pnumber = random.randint(0, 3)
+        print('===', 'Игрок:', player[0], 'Побед:', player[1], '===')
+        number = random.randint(1, 3)
+        print('Шарик в наперстке:', number)
+        pnumber = random.randint(1, 3)
+        print('Выбор игрока:', pnumber)
         if pnumber == number:
             player[1] += 1
+            print(player[0], 'выиграл')
         else:
             print(player[0], 'проиграл')
-print(player[0], 'победил')
-print(player)   
+print('+' * 20)
+for player in players: 
+    print(player[0],':',player[1])     
+print(random.randint(0, 9999), 'Досмотрели до конца')
