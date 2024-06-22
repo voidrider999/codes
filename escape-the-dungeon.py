@@ -13,3 +13,6 @@ while True:
         player['x'] += 1
     else:
         continue
+    if player['x'] > 10 or player['y'] < 0 or player['x'] < 0 or player['y'] > 10:
+        print('Escaped')
+        break
