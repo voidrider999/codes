@@ -1,0 +1,17 @@
+s = 'hello  world'
+print(s)
+print(s[5])
+print(s[9])
+print('efghigk'[3])
+d = 'hello'
+print(d[0])
+print(d[2])
+print(len(s) - 1)
+print(s[2:6])
+print(s[4:])
+print(s[:4])
+print(s[:])
+print(s[1::2])
+print(s[:: - 1])
+print(s[2:8:3])
+print(s[:4] + 'a' + s[5:])
