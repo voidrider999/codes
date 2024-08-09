@@ -1,6 +1,7 @@
 import pygame
 import pymunk
 import pymunk.pygame_util
+import random
 
 pygame.init()
 screen = pygame.display.set_mode([500, 500])
@@ -10,13 +11,17 @@ space = pymunk.Space()
 space.gravity = (0, 1000)
 draw_opts = pymunk.pygame_util.DrawOptions(screen)
 
-body = pymunk.Body()
-body.position = (51, 0)
-shape = pymunk.Circle(body, 20)
-shape.mass = 1
-shape.elasticity = 0.7
-shape.friction = 1
-space.add(body, shape)
+for i in range(10):
+    x = random.randint(0, 500)
+    y = random.randint(0, 500)
+    r = random.randint(10, 20)
+    body = pymunk.Body()
+    body.position = (x, y)
+    shape = pymunk.Circle(body, r)
+    shape.mass = 1
+    shape.elasticity = 0.7
+    shape.friction = 1
+    space.add(body, shape)
 
 line1 = pymunk.Segment(space.static_body, (50, 100), (200, 200), 2)
 line1.elasticity = 0.7
