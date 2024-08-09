@@ -13,10 +13,9 @@ draw_opts = pymunk.pygame_util.DrawOptions(screen)
 
 for i in range(10):
     x = random.randint(0, 500)
-    y = random.randint(0, 500)
     r = random.randint(10, 20)
     body = pymunk.Body()
-    body.position = (x, y)
+    body.position = (x, 0)
     shape = pymunk.Circle(body, r)
     shape.mass = 1
     shape.elasticity = 0.7
