@@ -11,25 +11,30 @@ space = pymunk.Space()
 space.gravity = (0, 1000)
 draw_opts = pymunk.pygame_util.DrawOptions(screen)
 
-line1 = pymunk.Segment(space.static_body, (200, 0), (500, 0), 2)
+line1 = pymunk.Segment(space.static_body, (200, 0), (500, 0), 5)
 line1.elasticity = 0.5
 line1.friction = 1
 space.add(line1)
 
-line2 = pymunk.Segment(space.static_body, (100, 450), (500, 400), 2)
+line2 = pymunk.Segment(space.static_body, (100, 450), (500, 400), 5)
 line2.elasticity = 0.5
 line2.friction = 1
 space.add(line2)
 
-line3 = pymunk.Segment(space.static_body, (0, 100), (0, 500), 2)
-line2.elasticity = 0.5
-line2.friction = 1
+line3 = pymunk.Segment(space.static_body, (0, 100), (0, 500), 5)
+line3.elasticity = 0.5
+line3.friction = 1
 space.add(line3)
 
-line4 = pymunk.Segment(space.static_body, (0, 100), (200, 0), 2)
+line4 = pymunk.Segment(space.static_body, (0, 100), (200, 0), 5)
 line4.elasticity = 0.5
 line4.friction = 1
 space.add(line4)
+
+line5 = pymunk.Segment(space.static_body, (500, 0), (500, 500), 5)
+line5.elasticity = 0.5
+line5.friction = 1
+space.add(line5)
 
 i = 0
 while True:
