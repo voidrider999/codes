@@ -35,11 +35,11 @@ i = 0
 while True:
     if i % 15 == 0:
         body = pymunk.Body()
-        body.position = (5, 0)     
+        body.position = (5, 0)
         shape = pymunk.Circle(body, 10)
-        shape.mass = 1            
+        shape.mass = 1
         shape.elasticity = 1
-        shape.friction = 1       
+        shape.friction = 1
         space.add(body, shape)
 
     space.step(1/60)
