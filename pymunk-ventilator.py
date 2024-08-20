@@ -53,6 +53,11 @@ while True:
     for body in bodies:
         if body.position.y > 550:
             body.position = (400, 50)
+        if body.position.x < 100:
+            body.apply_force_at_world_point((0, -2000), (0, 0))
+            if body.position.y < 300:
+                body.apply_force_at_world_point((400, 0), (0, 0))
+            
 
     space.step(1/60)
     screen.fill((0, 0, 0))
