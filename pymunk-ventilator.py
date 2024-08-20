@@ -36,6 +36,7 @@ line5.elasticity = 0.5
 line5.friction = 0.1
 space.add(line5)
 
+bodies = []
 for i in range(20):
     r = random.randint(10, 20)
     m = r / 10
@@ -46,8 +47,13 @@ for i in range(20):
     shape.elasticity = 0.5
     shape.friction = 0.1
     space.add(body, shape)
+    bodies.append(body)
 
 while True:
+    for body in bodies:
+        if body.position.y > 550:
+            body.position = (400, 50)
+
     space.step(1/60)
     screen.fill((0, 0, 0))
     space.debug_draw(draw_opts)
