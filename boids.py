@@ -6,10 +6,11 @@ VX_MAX = 10
 VY_MAX = 10
 HEIGHT = 500
 WIDTH = 500
-PROTECTED = 15
-VISIBLE = 30
-PROTECTED_COEF = 0.9
-SYNC_COEF = 0.9
+PROTECTED = 17
+VISIBLE = 50
+PROTECTED_COEF = 0.05
+SYNC_COEF = 0.3
+CENTER_COEF = 0.01
 WALL_COEF = 2
 
 pygame.init()
@@ -31,6 +32,8 @@ while True:
         boid = boids[i]
         visible_avg_vx = 0
         visible_avg_vy = 0
+        visible_avg_x = 0
+        visible_avg_y = 0
         visible_count = 0
         for j in range(len(boids)):
             if i == j:
@@ -45,6 +48,8 @@ while True:
                 visible_count += 1
                 visible_avg_vx += other['vx']
                 visible_avg_vy += other['vy']
+                visible_avg_x += other['x']
+                visible_avg_y += other['y']
             else:
                 pass
 
@@ -53,6 +58,13 @@ while True:
             visible_avg_vy /= visible_count
             boid['vx'] += (visible_avg_vx - boid['vx']) * SYNC_COEF
             boid['vy'] += (visible_avg_vy - boid['vy']) * SYNC_COEF
+
+            visible_avg_x /= visible_count
+            visible_avg_y /= visible_count
+            dist_x = boid['x'] - visible_avg_x
+            dist_y = boid['y'] - visible_avg_y
+            boid['vx'] += -dist_x * CENTER_COEF
+            boid['vy'] += -dist_y * CENTER_COEF
 
         if boid['x'] >= WIDTH - 50:
             boid['vx'] -= WALL_COEF
