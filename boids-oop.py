@@ -11,7 +11,7 @@ VISIBLE = 50
 PROTECTED_COEF = 0.05
 SYNC_COEF = 0.3
 CENTER_COEF = 0.01
-WALL_COEF = 2
+WALL_ACCEL = 2
 
 pygame.init()
 screen = pygame.display.set_mode([WIDTH, HEIGHT])
@@ -23,6 +23,23 @@ class Boid:
         self.y = y
         self.vx = vx
         self.vy = vy
+
+    def update(self):
+        self.x += self.vx
+        self.y += self.vy
+
+    def draw(self, screen):
+        pygame.draw.circle(screen, (255, 0, 0), (self.x, self.y), 5)
+
+    def wall_collision(self):
+        if self.x >= WIDTH - 50:
+            self.vx += -WALL_ACCEL
+        if self.x <= 50:
+            self.vx += WALL_ACCEL
+        if self.y >= HEIGHT - 50:
+            self.vy += -WALL_ACCEL
+        if self.y <= 50:
+            self.vy += WALL_ACCEL
 
 boids = []
 for _ in range(N):
@@ -73,14 +90,7 @@ while True:
             boid.vx += -dist_x * CENTER_COEF
             boid.vy += -dist_y * CENTER_COEF
 
-        if boid.x >= WIDTH - 50:
-            boid.vx -= WALL_COEF
-        if boid.x <= 50:
-            boid.vx += WALL_COEF
-        if boid.y >= HEIGHT - 50:
-            boid.vy -= WALL_COEF
-        if boid.y <= 50:
-            boid.vy += WALL_COEF
+        boid.wall_collision()
 
         if boid.vx > VX_MAX:
             boid.vx = VX_MAX
@@ -91,8 +101,7 @@ while True:
         if boid.vy < -VY_MAX:
             boid.vy = -VY_MAX
 
-        boid.x += boid.vx
-        boid.y += boid.vy
-        pygame.draw.circle(screen, (255, 0, 0), (boid.x, boid.y), 5)
+        boid.update()
+        boid.draw(screen)
     pygame.display.flip()
     clock.tick(60)
