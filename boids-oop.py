@@ -41,6 +41,17 @@ class Boid:
         if self.y <= 50:
             self.vy += WALL_ACCEL
 
+    def limit_velocity(self):
+        if self.vx > VX_MAX:
+            self.vx = VX_MAX
+        if self.vx < -VX_MAX:
+            self.vx = -VX_MAX
+        if self.vy > VY_MAX:
+            self.vy = VY_MAX
+        if self.vy < -VY_MAX:
+            self.vy = -VY_MAX
+
+
 boids = []
 for _ in range(N):
     x = random.randint(0, WIDTH)
@@ -91,15 +102,7 @@ while True:
             boid.vy += -dist_y * CENTER_COEF
 
         boid.wall_collision()
-
-        if boid.vx > VX_MAX:
-            boid.vx = VX_MAX
-        if boid.vx < -VX_MAX:
-            boid.vx = -VX_MAX
-        if boid.vy > VY_MAX:
-            boid.vy = VY_MAX
-        if boid.vy < -VY_MAX:
-            boid.vy = -VY_MAX
+        boid.limit_velocity()
 
         boid.update()
         boid.draw(screen)
