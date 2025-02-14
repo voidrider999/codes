@@ -24,7 +24,7 @@ class Boid:
         self.vx = vx
         self.vy = vy
 
-    def update(self):
+    def move(self):
         self.x += self.vx
         self.y += self.vy
 
@@ -51,34 +51,20 @@ class Boid:
         if self.vy < -VY_MAX:
             self.vy = -VY_MAX
 
-
-boids = []
-for _ in range(N):
-    x = random.randint(0, WIDTH)
-    y = random.randint(0, HEIGHT)
-    vx = random.randint(-VX_MAX, VX_MAX)
-    vy = random.randint(-VY_MAX, VY_MAX)
-    boid = Boid(x, y, vx, vy)
-    boids.append(boid)
-
-while True:
-    screen.fill((0, 0, 0))
-    for i in range(len(boids)):
-        boid = boids[i]
+    def interact(self, boids):
         visible_avg_vx = 0
         visible_avg_vy = 0
         visible_avg_x = 0
         visible_avg_y = 0
         visible_count = 0
-        for j in range(len(boids)):
-            if i == j:
+        for other in boids:
+            if other is self:
                 continue
-            other = boids[j]
-            dist_x = boid.x - other.x
-            dist_y = boid.y - other.y
+            dist_x = self.x - other.x
+            dist_y = self.y - other.y
             if abs(dist_x) <= PROTECTED and abs(dist_y) <= PROTECTED:
-                boid.vx += dist_x * PROTECTED_COEF
-                boid.vy += dist_y * PROTECTED_COEF
+                self.vx += dist_x * PROTECTED_COEF
+                self.vy += dist_y * PROTECTED_COEF
             elif abs(dist_x) <= VISIBLE and abs(dist_y) <= VISIBLE:
                 visible_count += 1
                 visible_avg_vx += other.vx
@@ -91,20 +77,34 @@ while True:
         if visible_count > 0:
             visible_avg_vx /= visible_count
             visible_avg_vy /= visible_count
-            boid.vx += (visible_avg_vx - boid.vx) * SYNC_COEF
-            boid.vy += (visible_avg_vy - boid.vy) * SYNC_COEF
+            self.vx += (visible_avg_vx - self.vx) * SYNC_COEF
+            self.vy += (visible_avg_vy - self.vy) * SYNC_COEF
 
             visible_avg_x /= visible_count
             visible_avg_y /= visible_count
-            dist_x = boid.x - visible_avg_x
-            dist_y = boid.y - visible_avg_y
-            boid.vx += -dist_x * CENTER_COEF
-            boid.vy += -dist_y * CENTER_COEF
+            dist_x = self.x - visible_avg_x
+            dist_y = self.y - visible_avg_y
+            self.vx += -dist_x * CENTER_COEF
+            self.vy += -dist_y * CENTER_COEF
 
+
+boids = []
+for _ in range(N):
+    x = random.randint(0, WIDTH)
+    y = random.randint(0, HEIGHT)
+    vx = random.randint(-VX_MAX, VX_MAX)
+    vy = random.randint(-VY_MAX, VY_MAX)
+    boid = Boid(x, y, vx, vy)
+    boids.append(boid)
+
+while True:
+    screen.fill((0, 0, 0))
+    for boid in boids:
+        boid.interact(boids)
         boid.wall_collision()
         boid.limit_velocity()
-
-        boid.update()
+        boid.move()
         boid.draw(screen)
+
     pygame.display.flip()
     clock.tick(60)
