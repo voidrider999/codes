@@ -15,8 +15,12 @@ while True:
     t = clock.tick(10)
     print(t)
     screen.fill((0, 0, 0))
-    for cell in snake:
+    for i, cell in enumerate(snake):
         x = cell['xc'] * 10
         y = cell['yc'] * 10
-        pygame.draw.rect(screen, (0, 255, 0), pygame.Rect(x, y, 10, 10))
+        if i % 2 == 0:
+            color = (255, 0, 0)
+        else:
+            color = (0, 0, 255)
+        pygame.draw.rect(screen, color, pygame.Rect(x, y, 10, 10))
     pygame.display.flip()
