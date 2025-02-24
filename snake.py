@@ -34,7 +34,7 @@ while running:
             elif event.key == pygame.K_DOWN:
                 direction = DOWN
 
-    t = clock.tick(10) / 1000
+    t = clock.tick(60) / 1000
     dist += t * speed
     if dist >= 1:
         dist -= 1
@@ -53,6 +53,15 @@ while running:
             head['yc'] -= 1
         elif direction == DOWN:
             head['yc'] += 1
+
+        if head['xc'] > 49:
+            head['xc'] = 0
+        if head['xc'] < 0:
+            head['xc'] = 49
+        if head['yc'] > 49:
+            head['yc'] = 0
+        if head['yc'] < 0:
+            head['yc'] = 49
 
     print(t, dist)
     screen.fill((0, 0, 0))
