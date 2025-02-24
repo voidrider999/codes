@@ -10,6 +10,10 @@ snake = [
     {'xc': 25, 'yc': 25},
     {'xc': 26, 'yc': 25},
 ]
+new = {
+    'xc': random.randint(5, 45),
+    'yc': random.randint(5, 20),
+}
 
 UP = 0
 DOWN = 1
@@ -63,6 +67,11 @@ while running:
         if head['yc'] < 0:
             head['yc'] = 49
 
+        if head['xc'] == new['xc'] and head['yc'] == new['yc']:
+            speed *= 1.1 
+            snake.insert(0, new)
+            new = {'xc': 0, 'yc': 0}
+
     print(t, dist)
     screen.fill((0, 0, 0))
     for i, cell in enumerate(snake):
@@ -73,4 +82,8 @@ while running:
         else:
             color = (0, 255, 0)
         pygame.draw.rect(screen, color, pygame.Rect(x, y, 10, 10))
+
+    x = new['xc'] * 10
+    y = new['yc'] * 10
+    pygame.draw.rect(screen, (0, 255, 255), pygame.Rect(x, y, 10, 10)) 
     pygame.display.flip()
