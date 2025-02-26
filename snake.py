@@ -74,7 +74,12 @@ while running:
 
     print(t, dist)
     screen.fill((0, 0, 0))
-    for i, cell in enumerate(snake):
+
+    x = new['xc'] * 10
+    y = new['yc'] * 10
+    pygame.draw.rect(screen, (0, 255, 255), pygame.Rect(x, y, 10, 10)) 
+
+    for (i, cell) in enumerate(reversed(snake)):
         x = cell['xc'] * 10
         y = cell['yc'] * 10
         if i % 2 == 0:
@@ -83,7 +88,4 @@ while running:
             color = (0, 255, 0)
         pygame.draw.rect(screen, color, pygame.Rect(x, y, 10, 10))
 
-    x = new['xc'] * 10
-    y = new['yc'] * 10
-    pygame.draw.rect(screen, (0, 255, 255), pygame.Rect(x, y, 10, 10)) 
     pygame.display.flip()
