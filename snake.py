@@ -70,7 +70,20 @@ while running:
         if head['xc'] == new['xc'] and head['yc'] == new['yc']:
             speed *= 1.1 
             snake.insert(0, new)
-            new = {'xc': 0, 'yc': 0}
+            while True:
+                new = {
+                    'xc': random.randint(0, 49),
+                    'yc': random.randint(0, 49),
+                }
+                new_is_good = True
+                for cell in snake:
+                    dist_x = abs(cell['xc'] - new['xc'])
+                    dist_y = abs(cell['yc'] - new['yc'])
+                    if dist_x < 5 and dist_y < 5:
+                        new_is_good = False
+                        break
+                if new_is_good:
+                    break
 
     print(t, dist)
     screen.fill((0, 0, 0))
