@@ -67,6 +67,11 @@ while running:
         if head['yc'] < 0:
             head['yc'] = 49
 
+        for cell in snake[:-1]:
+            if head['xc'] == cell['xc'] and head['yc'] == cell['yc']:
+                speed = 0
+                break
+
         if head['xc'] == new['xc'] and head['yc'] == new['yc']:
             speed *= 1.1 
             snake.insert(0, new)
@@ -75,14 +80,14 @@ while running:
                     'xc': random.randint(0, 49),
                     'yc': random.randint(0, 49),
                 }
-                new_is_good = True
+                new_is_too_near = False
                 for cell in snake:
                     dist_x = abs(cell['xc'] - new['xc'])
                     dist_y = abs(cell['yc'] - new['yc'])
                     if dist_x < 5 and dist_y < 5:
-                        new_is_good = False
+                        new_is_too_near = True
                         break
-                if new_is_good:
+                if not new_is_too_near:
                     break
 
     print(t, dist)
