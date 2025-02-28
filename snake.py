@@ -4,6 +4,7 @@ import random
 pygame.init()
 screen = pygame.display.set_mode([500, 500])
 clock = pygame.time.Clock()
+pygame.key.set_repeat(100)
 
 snake = [
     {'xc': 24, 'yc': 25},
@@ -25,6 +26,7 @@ dist = 0
 direction = RIGHT
 running = True
 while running:
+    boost = 1
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -40,6 +42,9 @@ while running:
                 newdir = DOWN
 
             if newdir is not None:
+                if newdir == direction:
+                    boost = 10 
+
                 print('newdir', newdir, 'dir', direction)
                 newhead = snake[-1].copy()
                 if newdir == RIGHT:
@@ -57,7 +62,7 @@ while running:
                     direction = newdir                    
 
     t = clock.tick(60) / 1000
-    dist += t * speed
+    dist += t * speed * boost
     if dist >= 1:
         dist -= 1
         print('before body move:', snake)
