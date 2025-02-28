@@ -15,7 +15,7 @@ new = {
     'yc': random.randint(5, 20),
 }
 
-UP = 0
+UP = 0 
 DOWN = 1
 LEFT = 2
 RIGHT = 3
@@ -29,25 +29,46 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.KEYDOWN:
+            newdir = None
             if event.key == pygame.K_LEFT:
-                direction = LEFT
+                newdir = LEFT
             elif event.key == pygame.K_RIGHT:
-                direction = RIGHT 
+                newdir = RIGHT 
             elif event.key == pygame.K_UP:
-                direction = UP
+                newdir = UP
             elif event.key == pygame.K_DOWN:
-                direction = DOWN
+                newdir = DOWN
+
+            if newdir is not None:
+                print('newdir', newdir, 'dir', direction)
+                newhead = snake[-1].copy()
+                if newdir == RIGHT:
+                    newhead['xc'] += 1
+                elif newdir == LEFT:
+                    newhead['xc'] -= 1
+                elif newdir == UP:
+                    newhead['yc'] -= 1
+                elif newdir == DOWN:
+                    newhead['yc'] += 1
+
+                prev = snake[-2]
+                if not (newhead['xc'] == prev['xc'] and
+                        newhead['yc'] == prev['yc']):
+                    direction = newdir                    
 
     t = clock.tick(60) / 1000
     dist += t * speed
     if dist >= 1:
         dist -= 1
+        print('before body move:', snake)
         for i in range(0, len(snake) - 1):
             cell = snake[i]
             nxt = snake[i + 1]
             cell['xc'] = nxt['xc']
             cell['yc'] = nxt['yc']
         
+        print('before head move:', snake)
+        print('direction', direction)
         head = snake[-1]
         if direction == RIGHT:
             head['xc'] += 1
@@ -58,6 +79,7 @@ while running:
         elif direction == DOWN:
             head['yc'] += 1
 
+        print('after head move:', snake)
         if head['xc'] > 49:
             head['xc'] = 0
         if head['xc'] < 0:
@@ -70,6 +92,9 @@ while running:
         for cell in snake[:-1]:
             if head['xc'] == cell['xc'] and head['yc'] == cell['yc']:
                 speed = 0
+                print(snake)
+                print(head, cell)
+                exit()
                 break
 
         if head['xc'] == new['xc'] and head['yc'] == new['yc']:
