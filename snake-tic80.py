@@ -1,15 +1,30 @@
 # script:  python
 
+RIGHT = 0
+LEFT = 1
+UP = 2
+DOWN = 3
+
 snake = [
     {'xc': 14, 'yc': 8},
     {'xc': 15, 'yc': 8},
     {'xc': 16, 'yc': 8},
 ]
 speed = 4 # cells/sec
+direction = RIGHT
 dist = 0
 
 def TIC():
-    global dist
+    global dist, direction
+
+    if btnp(0):
+        direction = UP
+    elif btnp(1):
+        direction = DOWN
+    elif btnp(2):
+        direction = LEFT
+    elif btnp(3):
+        direction = RIGHT
 
     dist += speed * 1/60    
     if dist >= 1:
@@ -21,7 +36,23 @@ def TIC():
             cell['yc'] = nxt['yc']
         
         head = snake[-1]
-        head['xc'] += 1
+        if direction == UP:
+            head['yc'] -= 1
+        elif direction == DOWN:
+            head['yc'] += 1
+        elif direction == LEFT:
+            head['xc'] -= 1
+        elif direction == RIGHT:
+            head['xc'] += 1
+
+        if head['xc'] > 29:
+            head['xc'] = 0
+        elif head['xc'] < 0:
+            head['xc'] = 29
+        elif head['yc'] > 16:
+            head['yc'] = 0
+        elif head['yc'] < 0:
+            head['yc'] = 16
 
     cls(1)
     for cell in snake:
