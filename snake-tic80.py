@@ -1,4 +1,5 @@
 # script:  python
+import random
 
 RIGHT = 0
 LEFT = 1
@@ -10,12 +11,13 @@ snake = [
     {'xc': 15, 'yc': 8},
     {'xc': 16, 'yc': 8},
 ]
+new = {'xc': random.randint(5, 25), 'yc': random.randint(2, 6)}
 speed = 4 # cells/sec
 direction = RIGHT
 dist = 0
 
 def TIC():
-    global dist, direction
+    global dist, direction, new
 
     if btnp(0):
         direction = UP
@@ -54,12 +56,19 @@ def TIC():
         elif head['yc'] < 0:
             head['yc'] = 16
 
+        if head['xc'] == new['xc'] and head['yc'] == new['yc']:
+            speed *= 1.1
+            snake.insert(0, new)
+            new = {'xc': 15, 'yc': 8}
+
     cls(1)
+    spr(1, new['xc'] * 8, new['yc'] * 8)
     for cell in snake:
         spr(0, cell['xc'] * 8, cell['yc'] * 8)
 
 # <TILES>
 # 000:3333333332222223322222233222222332222223322222233222222333333333
+# 001:444444444aaaaaa44aaaaaa44aaaaaa44aaaaaa44aaaaaa44aaaaaa444444444
 # </TILES>
 
 # <WAVES>
