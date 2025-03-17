@@ -59,7 +59,20 @@ def TIC():
         if head['xc'] == new['xc'] and head['yc'] == new['yc']:
             speed *= 1.1
             snake.insert(0, new)
-            new = {'xc': 15, 'yc': 8}
+            while True:
+                new = {
+                    'xc': random.randint(0, 29),
+                    'yc': random.randint(0, 16),
+                }
+                new_is_good = True
+                for cell in snake:
+                    dist_x = abs(new['xc'] - cell['xc'])
+                    dist_y = abs(new['yc'] - cell['yc'])
+                    if dist_x <= 3 and dist_y <= dist_y:
+                        new_is_good = False
+                        break
+                if new_is_good:
+                    break
 
     cls(1)
     spr(1, new['xc'] * 8, new['yc'] * 8)
