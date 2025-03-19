@@ -16,17 +16,46 @@ speed = 4 # cells/sec
 direction = RIGHT
 dist = 0
 
+def move_head(head, direction):
+    if direction == UP:
+        head['yc'] -= 1
+    elif direction == DOWN:
+        head['yc'] += 1
+    elif direction == LEFT:
+        head['xc'] -= 1
+    elif direction == RIGHT:
+        head['xc'] += 1
+
+    if head['xc'] > 29:
+        head['xc'] = 0
+    elif head['xc'] < 0:
+        head['xc'] = 29
+    elif head['yc'] > 16:
+        head['yc'] = 0
+    elif head['yc'] < 0:
+        head['yc'] = 16
+
 def TIC():
     global dist, direction, new, speed
 
+    newdir = None
     if btnp(0):
-        direction = UP
+        newdir = UP
     elif btnp(1):
-        direction = DOWN
+        newdir = DOWN
     elif btnp(2):
-        direction = LEFT
+        newdir = LEFT
     elif btnp(3):
-        direction = RIGHT
+        newdir = RIGHT
+
+    if newdir is not None:
+        newhead = snake[-1].copy()
+        move_head(newhead, newdir)
+        cell2 = snake[-2]
+        if newhead['xc'] == cell2['xc'] and newhead['yc'] == cell2['yc']:
+            pass
+        else:
+            direction = newdir
 
     dist += speed * 1/60    
     if dist >= 1:
@@ -38,23 +67,7 @@ def TIC():
             cell['yc'] = nxt['yc']
         
         head = snake[-1]
-        if direction == UP:
-            head['yc'] -= 1
-        elif direction == DOWN:
-            head['yc'] += 1
-        elif direction == LEFT:
-            head['xc'] -= 1
-        elif direction == RIGHT:
-            head['xc'] += 1
-
-        if head['xc'] > 29:
-            head['xc'] = 0
-        elif head['xc'] < 0:
-            head['xc'] = 29
-        elif head['yc'] > 16:
-            head['yc'] = 0
-        elif head['yc'] < 0:
-            head['yc'] = 16
+        move_head(head, direction)
 
         for i in range(len(snake) - 1):
             cell = snake[i]
