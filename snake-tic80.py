@@ -17,7 +17,7 @@ direction = RIGHT
 dist = 0
 
 def TIC():
-    global dist, direction, new
+    global dist, direction, new, speed
 
     if btnp(0):
         direction = UP
@@ -55,6 +55,13 @@ def TIC():
             head['yc'] = 0
         elif head['yc'] < 0:
             head['yc'] = 16
+
+        for i in range(len(snake) - 1):
+            cell = snake[i]
+            if head['xc'] == cell['xc'] and head['yc'] == cell['yc']:
+                trace(str(head) + ' ' + str(cell))
+                speed = 0
+                break
 
         if head['xc'] == new['xc'] and head['yc'] == new['yc']:
             speed *= 1.1
