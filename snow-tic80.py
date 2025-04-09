@@ -18,7 +18,12 @@ for i in range(FLAKES_NUM):
     }
     flakes.append(flake)
 
+frames = 0
+
 def TIC():
+    global frames
+
+    frames += 1
     cls(13)
     dt = 1/60
     for flake in flakes:
@@ -35,6 +40,19 @@ def TIC():
         xglob = flake['xbase'] + flake['xloc']
 
         pix(floor(xglob), floor(flake['y']), 12)
+
+    if frames % 5 != 0:
+        return 
+        
+    vbank(1)
+    x = randint(0, 239)
+    y = 135
+    while pix(x, y) == 12:
+        y -= 1
+        if y == 0:
+            break
+    tri(x, y, x - 16, y + 8, x + 16, y + 8, 12)
+    vbank(0)
 
 # <TILES>
 # 001:eccccccccc888888caaaaaaaca888888cacccccccacc0ccccacc0ccccacc0ccc
