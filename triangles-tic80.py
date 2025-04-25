@@ -1,35 +1,33 @@
 # script:  python
 
-from math import pi, sin, cos, floor
+from math import pi, sin, cos
 
-a = 0
+R = 10
+S = 2 * R + 2
 
-def TIC():
-    global a
+def draw_pyramid(xl, yt, a):
+    xr = xl + S
+    yb = yt + S
+    xc = xl + S/2
+    yc = yt + S/2
+    x = R * cos(a) + xc
+    y = R * sin(a) + yc
 
-    r = 10
-    s = 2 * r + 2
-    xc = 120
-    yc = 70
-    xl = xc - s/2
-    xr = xc + s/2
-    yt = yc - s/2
-    yb = yc + s/2
-    
-
-    dt = 1/60
-    w = pi / 6 * 4
-    rot_a = dt * w
-    a += rot_a
-    x = r * cos(a) + xc
-    y = r * sin(a) + yc
-    cls(0)
-    pix(floor(x), floor(y), 12)
-    pix(xc, yc, 12)
     tri(x, y, xl, yb, xl, yt, 1)
     tri(x, y, xl, yt, xr, yt, 2)
     tri(x, y, xr, yt, xr, yb, 3)
     tri(x, y, xr, yb, xl, yb, 4)
+    pix(int(x), int(y), 12)
+    #pix(int(xc), int(yc), 12)
+
+def TIC():
+    t = time() / 1000
+    cls(0)
+    for y in range(0, 136, S + 1):
+        for x in range(0, 240, S + 1):
+            w = (x + 5) * (y + 5) / 1000 + 1 # rad/s
+            a = w * t
+            draw_pyramid(x, y, a)
 
 # <TILES>
 # 001:eccccccccc888888caaaaaaaca888888cacccccccacc0ccccacc0ccccacc0ccc
