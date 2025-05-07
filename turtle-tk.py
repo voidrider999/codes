@@ -1,3 +1,8 @@
+# TODO return to canvas when moved out of it
+# TODO color picker (fg, bg)
+# TODO turn turtle in real time
+# TODO canvas to the right of widgets
+
 import tkinter as tk
 from tkinter import ttk
 from turtle import RawTurtle
@@ -12,9 +17,20 @@ length_sb = ttk.Spinbox(from_=1, to=100, increment=1)
 length_sb.set(1)
 length_sb.pack()
 
+def on_heading_validate():
+#    turtle.setheading(int(heading_sb.get()))
+    print('okay')
+    return True
+
 label = ttk.Label(text='Поворот')
 label.pack()
-heading_sb = ttk.Spinbox(from_=-360, to=360, increment=10)
+heading_sb = ttk.Spinbox(
+    from_=-360,
+    to=360,
+    increment=10,
+    validate='focusout',
+    validatecommand=on_heading_validate,
+)
 heading_sb.set(0)
 heading_sb.pack()
 
@@ -36,8 +52,7 @@ blue_sb = ttk.Spinbox(from_=0, to=255, increment=1)
 blue_sb.set(0)
 blue_sb.pack()
 
-def draw():
-    turtle.setheading(int(heading_sb.get()))
+def on_draw_click():
     turtle.getscreen().colormode(255)
     turtle.pencolor((
         int(red_sb.get()),
@@ -46,7 +61,7 @@ def draw():
     ))
     turtle.forward(int(length_sb.get()))
 
-draw_btn = ttk.Button(text='Draw', command=draw)
+draw_btn = ttk.Button(text='Draw', command=on_draw_click)
 draw_btn.pack()
 
 canvas = tk.Canvas(width=250, height=250)
