@@ -5,8 +5,7 @@
 import tkinter as tk
 from tkinter import ttk
 from turtle import RawTurtle
-from tkinter import filedialog
-from PIL import Image, ImageTk
+from PIL import Image
 from io import BytesIO
 
 root = tk.Tk()
@@ -68,16 +67,16 @@ def on_draw_click():
 draw_btn = ttk.Button(frame, text='Draw', command=on_draw_click)
 draw_btn.pack()
 
-canvas = tk.Canvas()
-
 def save_image():
     canvas.update()
     eps = canvas.postscript(colormode='color')
-    im = Image.open(BytesIO(bytes(eps,'ascii')))
+    im = Image.open(BytesIO(bytes(eps, 'ascii')))
     im.save('result.png')
 
 save_btn = ttk.Button(frame, text='Save', command=save_image)
 save_btn.pack()
+
+canvas = tk.Canvas()
 
 # если не указать вес, то он не растянет ячейки грида по ширине и высоте
 # даже если ряд всего один, вес указывать нужно
