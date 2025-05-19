@@ -16,7 +16,7 @@ frame = ttk.Frame(padding=(2, 2))
 label = ttk.Label(frame, text='Длина')
 label.pack()
 length_sb = ttk.Spinbox(frame, from_=1, to=100, increment=1)
-length_sb.set(1)
+length_sb.set(10)
 length_sb.pack()
 
 def on_heading_validate():
@@ -30,7 +30,7 @@ heading_sb = ttk.Spinbox(
     frame,
     from_=-360,
     to=360,
-    increment=10,
+    increment=5,
     validate='focusout',
     validatecommand=on_heading_validate,
 )
@@ -64,16 +64,16 @@ def on_draw_click():
     ))
     turtle.forward(int(length_sb.get()))
 
-draw_btn = ttk.Button(frame, text='Draw', command=on_draw_click)
-draw_btn.pack()
+draw_btn = ttk.Button(frame, text='Рисовать', command=on_draw_click)
+draw_btn.pack(pady=5)
 
-def save_image():
+def on_save_click():
     canvas.update()
     eps = canvas.postscript(colormode='color')
     im = Image.open(BytesIO(bytes(eps, 'ascii')))
     im.save('result.png')
 
-save_btn = ttk.Button(frame, text='Save', command=save_image)
+save_btn = ttk.Button(frame, text='Сохранить', command=on_save_click)
 save_btn.pack()
 
 canvas = tk.Canvas()
