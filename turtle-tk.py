@@ -1,6 +1,5 @@
 # TODO return to canvas when moved out of it
 # TODO color picker (fg, bg)
-# TODO turn turtle in real time
 
 import tkinter as tk
 from tkinter import ttk
@@ -15,25 +14,17 @@ frame = ttk.Frame(padding=(2, 2))
 
 label = ttk.Label(frame, text='Длина')
 label.pack()
-length_sb = ttk.Spinbox(frame, from_=1, to=100, increment=1)
+length_sb = ttk.Spinbox(frame, from_=0, to=100, increment=1)
 length_sb.set(10)
 length_sb.pack()
 
-def on_heading_validate():
-#    turtle.setheading(int(heading_sb.get()))
-    print('okay')
-    return True
+def on_heading_click():
+    turtle.setheading(int(heading_sb.get()))
 
 label = ttk.Label(frame, text='Поворот')
 label.pack()
-heading_sb = ttk.Spinbox(
-    frame,
-    from_=-360,
-    to=360,
-    increment=5,
-    validate='focusout',
-    validatecommand=on_heading_validate,
-)
+heading_sb = ttk.Spinbox(frame, from_=-360, to=360, increment=5,
+    command=on_heading_click)
 heading_sb.set(0)
 heading_sb.pack()
 
@@ -62,6 +53,7 @@ def on_draw_click():
         int(green_sb.get()),
         int(blue_sb.get()),
     ))
+    turtle.setheading(int(heading_sb.get()))
     turtle.forward(int(length_sb.get()))
 
 draw_btn = ttk.Button(frame, text='Рисовать', command=on_draw_click)
