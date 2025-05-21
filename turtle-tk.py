@@ -1,4 +1,5 @@
 # TODO color picker (fg, bg)
+# TODO clear canvas
 
 import tkinter as tk
 from tkinter import ttk
@@ -14,6 +15,15 @@ heading = tk.IntVar(value=0)
 red = tk.IntVar(value=0)
 green = tk.IntVar(value=0)
 blue = tk.IntVar(value=0)
+
+def draw_absolute():
+    turtle.getscreen().colormode(255)
+    turtle.pencolor((red.get(), green.get(), blue.get()))
+    turtle.setheading(heading.get())
+    turtle.forward(length.get())
+    x, y = int(turtle.xcor()), int(turtle.ycor())
+    rgb = (red.get(), green.get(), blue.get())
+    print(f'x:{x}, y:{y}, heading:{heading.get()}, RGB:{rgb}')
 
 def tab_absolute_mode(parent):
     frame = ttk.Frame(parent)
@@ -49,12 +59,7 @@ def tab_absolute_mode(parent):
     blue_sb.pack()
 
     def on_draw_click():
-        turtle.getscreen().colormode(255)
-        turtle.pencolor((red.get(), green.get(), blue.get()))
-        turtle.setheading(heading.get())
-        turtle.forward(length.get())
-        x, y = int(turtle.xcor()), int(turtle.ycor())
-        print(f'curx:{x}, cury:{y}')
+        draw_absolute()
 
     draw_btn = ttk.Button(frame, text='Рисовать', command=on_draw_click)
     draw_btn.pack(pady=5)
@@ -95,16 +100,12 @@ def tab_relative_mode(parent):
     blue_sb.pack()
 
     def on_draw_click():
-        turtle.getscreen().colormode(255)
-        turtle.pencolor((
-            int(red_sb.get()),
-            int(green_sb.get()),
-            int(blue_sb.get()),
-        ))
-        turtle.setheading(turtle.heading() + int(heading_sb.get()))
-        turtle.forward(int(length_sb.get()))
-        x, y = int(turtle.xcor()), int(turtle.ycor())
-        print(f'curx:{x}, cury:{y}')
+        length.set(length.get() + int(length_sb.get()))
+        heading.set((heading.get() + int(heading_sb.get())) % 360)
+        red.set((red.get() + int(red_sb.get())) % 256)
+        green.set((green.get() + int(green_sb.get())) % 256)
+        blue.set((blue.get() + int(blue_sb.get())) % 256)
+        draw_absolute()
 
     draw_btn = ttk.Button(frame, text='Рисовать', command=on_draw_click)
     draw_btn.pack(pady=5)
@@ -125,7 +126,7 @@ save_btn.pack()
 def on_back_click():
     canvas.update()
     w, h = canvas.winfo_width(), canvas.winfo_height()
-    window_caption_h = 15 
+    window_caption_h = 15
 
     move_counter = 0
     while True:
