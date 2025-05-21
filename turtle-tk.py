@@ -9,52 +9,50 @@ from io import BytesIO
 root = tk.Tk()
 root.eval('tk::PlaceWindow . center')
 
+length = tk.IntVar(value=10)
+heading = tk.IntVar(value=0)
+red = tk.IntVar(value=0)
+green = tk.IntVar(value=0)
+blue = tk.IntVar(value=0)
+
 def tab_absolute_mode(parent):
     frame = ttk.Frame(parent)
 
     label = ttk.Label(frame, text='Длина')
     label.pack()
-    length_sb = ttk.Spinbox(frame, from_=-100, to=100, increment=1)
-    length_sb.set(10)
+    length_sb = ttk.Spinbox(frame, textvariable=length, from_=-100, to=100,
+         increment=1)
     length_sb.pack()
 
     def on_heading_click():
-        turtle.setheading(int(heading_sb.get()))
+        turtle.setheading(heading.get())
 
     label = ttk.Label(frame, text='Поворот')
     label.pack()
-    heading_sb = ttk.Spinbox(frame, from_=-360, to=360, increment=5,
-        command=on_heading_click)
-    heading_sb.set(0)
+    heading_sb = ttk.Spinbox(frame, textvariable=heading, from_=-360, to=360, 
+        increment=5, command=on_heading_click)
     heading_sb.pack()
 
     label = ttk.Label(frame, text='Red')
     label.pack()
-    red_sb = ttk.Spinbox(frame, from_=0, to=255, increment=1)
-    red_sb.set(0)
+    red_sb = ttk.Spinbox(frame, textvariable=red, from_=0, to=255, increment=1)
     red_sb.pack()
 
     label = ttk.Label(frame, text='Green')
     label.pack()
-    green_sb = ttk.Spinbox(frame, from_=0, to=255, increment=1)
-    green_sb.set(0)
+    green_sb = ttk.Spinbox(frame, textvariable=green, from_=0, to=255, increment=1)
     green_sb.pack()
 
     label = ttk.Label(frame, text='Blue')
     label.pack()
-    blue_sb = ttk.Spinbox(frame, from_=0, to=255, increment=1)
-    blue_sb.set(0)
+    blue_sb = ttk.Spinbox(frame, textvariable=blue, from_=0, to=255, increment=1)
     blue_sb.pack()
 
     def on_draw_click():
         turtle.getscreen().colormode(255)
-        turtle.pencolor((
-            int(red_sb.get()),
-            int(green_sb.get()),
-            int(blue_sb.get()),
-        ))
-        turtle.setheading(int(heading_sb.get()))
-        turtle.forward(int(length_sb.get()))
+        turtle.pencolor((red.get(), green.get(), blue.get()))
+        turtle.setheading(heading.get())
+        turtle.forward(length.get())
         x, y = int(turtle.xcor()), int(turtle.ycor())
         print(f'curx:{x}, cury:{y}')
 
@@ -72,13 +70,9 @@ def tab_relative_mode(parent):
     length_sb.set(0)
     length_sb.pack()
 
-    def on_heading_click():
-        turtle.setheading(int(heading_sb.get()))
-
     label = ttk.Label(frame, text='Поворот')
     label.pack()
-    heading_sb = ttk.Spinbox(frame, from_=-360, to=360, increment=5,
-        command=on_heading_click)
+    heading_sb = ttk.Spinbox(frame, from_=-360, to=360, increment=5)
     heading_sb.set(0)
     heading_sb.pack()
 
@@ -156,12 +150,12 @@ canvas = tk.Canvas()
 
 # если не указать вес, то он не растянет ячейки грида по ширине и высоте
 # даже если ряд всего один, вес указывать нужно
-root.rowconfigure(index=0, weight=1)
+for r in range(2): root.rowconfigure(index=r, weight=1)
 for c in range(2): root.columnconfigure(index=c, weight=1)
 mode_nb.grid(row=0, column=0)
+btn_frame.grid(row=1, column=0)
 # sticky=nswe растягивает виджет на всю ячейку (с севера на юг и с запада
 # на восток)
-btn_frame.grid(row=1, column=0)
 canvas.grid(row=0, column=1, rowspan=2, sticky='nswe')
 
 turtle = RawTurtle(canvas)
