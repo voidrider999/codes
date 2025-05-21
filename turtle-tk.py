@@ -16,9 +16,16 @@ def draw_absolute():
 def draw_relative(length_diff, heading_diff, red_diff, green_diff, blue_diff):
     length.set(length.get() + length_diff)
     heading.set((heading.get() + heading_diff) % 360)
-    red.set(min(red.get() + red_diff, 255))
-    green.set(min(green.get() + green_diff, 255))
-    blue.set(min(blue.get() + blue_diff, 255))
+
+    newr = min(red.get() + red_diff, 255)
+    red.set(max(newr, 0))
+
+    newg = min(green.get() + green_diff, 255)
+    green.set(max(newg, 0))
+
+    newb = min(blue.get() + blue_diff, 255)
+    blue.set(max(newb, 0))
+
     draw_absolute()
 
 def tab_absolute_mode(parent):
@@ -79,25 +86,25 @@ def tab_relative_mode(parent):
 
     label = ttk.Label(frame, text='Красный')
     label.pack()
-    red_sb = ttk.Spinbox(frame, from_=0, to=255, increment=1)
+    red_sb = ttk.Spinbox(frame, from_=-255, to=255, increment=1)
     red_sb.set(0)
     red_sb.pack()
 
     label = ttk.Label(frame, text='Зеленый')
     label.pack()
-    green_sb = ttk.Spinbox(frame, from_=0, to=255, increment=1)
+    green_sb = ttk.Spinbox(frame, from_=-255, to=255, increment=1)
     green_sb.set(0)
     green_sb.pack()
 
     label = ttk.Label(frame, text='Синий')
     label.pack()
-    blue_sb = ttk.Spinbox(frame, from_=0, to=255, increment=1)
+    blue_sb = ttk.Spinbox(frame, from_=-255, to=255, increment=1)
     blue_sb.set(0)
     blue_sb.pack()
 
     label = ttk.Label(frame, text='Повторы')
     label.pack()
-    repeat_sb = ttk.Spinbox(frame, from_=1, to=1000, increment=1)
+    repeat_sb = ttk.Spinbox(frame, from_=0, to=1000, increment=1)
     repeat_sb.set(1)
     repeat_sb.pack()
 
@@ -119,6 +126,32 @@ def tab_relative_mode(parent):
 def frame_buttons():
     frame = ttk.Frame() 
 
+    def on_undo_click():
+        turtle.undo()
+        turtle.undo()
+
+        color = turtle.pencolor() # строка цвета или кортеж
+        if isinstance(color, str):
+            r, g, b = [c//256 for c in root.winfo_rgb(color)]
+        else:
+            r, g, b = color
+        red.set(int(r))
+        green.set(int(g))
+        blue.set(int(b))
+
+    undo_btn = ttk.Button(frame, text='Отменить', command=on_undo_click)
+    undo_btn.pack()
+
+    def on_clear_click():
+        turtle.reset()
+        heading.set(0)
+        red.set(0)
+        green.set(0)
+        blue.set(0)
+
+    clear_btn = ttk.Button(frame, text='Очистить', command=on_clear_click)
+    clear_btn.pack()
+
     def on_save_click():
         canvas.update()
         eps = canvas.postscript(colormode='color')
@@ -127,42 +160,6 @@ def frame_buttons():
 
     save_btn = ttk.Button(frame, text='Сохранить', command=on_save_click)
     save_btn.pack()
-
-    def on_back_click():
-        canvas.update()
-        w, h = canvas.winfo_width(), canvas.winfo_height()
-        window_caption_h = 15
-
-        move_counter = 0
-        while True:
-            x, y = int(turtle.xcor()), int(turtle.ycor())
-            print(x, y, w, h)
-            if x > -w/2 and x < w/2 and y > -h/2 and y < h/2 - window_caption_h:
-                break
-            turtle.backward(1)
-
-            move_counter += 1
-            if move_counter > 110:
-                turtle.teleport(0, 0)
-                break
-
-    back_btn = ttk.Button(frame, text='Вернуться', command=on_back_click)
-    back_btn.pack()
-
-    def on_clear_click():
-        canvas.delete('all')
-        global turtle
-        turtle = RawTurtle(canvas)
-
-    clear_btn = ttk.Button(frame, text='Очистить', command=on_clear_click)
-    clear_btn.pack()
-
-    def on_undo_click():
-        turtle.undo()
-        turtle.undo()
-
-    undo_btn = ttk.Button(frame, text='Отменить', command=on_undo_click)
-    undo_btn.pack()
 
     return frame
 
