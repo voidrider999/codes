@@ -1,5 +1,4 @@
 # TODO очистить канвас
-# TODO undo
 
 import tkinter as tk
 from tkinter import ttk
@@ -100,7 +99,7 @@ def tab_relative_mode(parent):
 
     label = ttk.Label(frame, text='Повторы')
     label.pack()
-    repeat_sb = ttk.Spinbox(frame, from_=1, increment=1)
+    repeat_sb = ttk.Spinbox(frame, from_=1, to=1000, increment=1)
     repeat_sb.set(1)
     repeat_sb.pack()
 
@@ -151,6 +150,13 @@ def frame_buttons():
 
     back_btn = ttk.Button(frame, text='Вернуться', command=on_back_click)
     back_btn.pack()
+
+    def on_undo_click():
+        turtle.undo()
+        turtle.undo()
+
+    undo_btn = ttk.Button(frame, text='Отменить', command=on_undo_click)
+    undo_btn.pack()
 
     return frame
 
