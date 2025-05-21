@@ -1,20 +1,12 @@
 # TODO color picker (fg, bg)
-# TODO clear canvas
+# TODO очистить канвас
+# TODO undo
 
 import tkinter as tk
 from tkinter import ttk
 from turtle import RawTurtle
 from PIL import Image
 from io import BytesIO
-
-root = tk.Tk()
-root.eval('tk::PlaceWindow . center')
-
-length = tk.IntVar(value=10)
-heading = tk.IntVar(value=0)
-red = tk.IntVar(value=0)
-green = tk.IntVar(value=0)
-blue = tk.IntVar(value=0)
 
 def draw_absolute():
     turtle.getscreen().colormode(255)
@@ -112,47 +104,62 @@ def tab_relative_mode(parent):
 
     return frame
 
-btn_frame = ttk.Frame() 
+def frame_buttons():
+    frame = ttk.Frame() 
 
-def on_save_click():
-    canvas.update()
-    eps = canvas.postscript(colormode='color')
-    im = Image.open(BytesIO(bytes(eps, 'ascii')))
-    im.save('result.png')
+    def on_save_click():
+        canvas.update()
+        eps = canvas.postscript(colormode='color')
+        im = Image.open(BytesIO(bytes(eps, 'ascii')))
+        im.save('result.png')
 
-save_btn = ttk.Button(btn_frame, text='Сохранить', command=on_save_click)
-save_btn.pack()
+    save_btn = ttk.Button(frame, text='Сохранить', command=on_save_click)
+    save_btn.pack()
 
-def on_back_click():
-    canvas.update()
-    w, h = canvas.winfo_width(), canvas.winfo_height()
-    window_caption_h = 15
+    def on_back_click():
+        canvas.update()
+        w, h = canvas.winfo_width(), canvas.winfo_height()
+        window_caption_h = 15
 
-    move_counter = 0
-    while True:
-        x, y = int(turtle.xcor()), int(turtle.ycor())
-        print(x, y, w, h)
-        if x > -w/2 and x < w/2 and y > -h/2 and y < h/2 - window_caption_h:
-            break
-        turtle.backward(1)
+        move_counter = 0
+        while True:
+            x, y = int(turtle.xcor()), int(turtle.ycor())
+            print(x, y, w, h)
+            if x > -w/2 and x < w/2 and y > -h/2 and y < h/2 - window_caption_h:
+                break
+            turtle.backward(1)
 
-        move_counter += 1
-        if move_counter > 110:
-            turtle.teleport(0, 0)
-            break
+            move_counter += 1
+            if move_counter > 110:
+                turtle.teleport(0, 0)
+                break
 
-back_btn = ttk.Button(btn_frame, text='Вернуться', command=on_back_click)
-back_btn.pack()
+    back_btn = ttk.Button(frame, text='Вернуться', command=on_back_click)
+    back_btn.pack()
 
+    return frame
+
+root = tk.Tk()
+root.eval('tk::PlaceWindow . center')
+
+length = tk.IntVar(value=10)
+heading = tk.IntVar(value=0)
+red = tk.IntVar(value=0)
+green = tk.IntVar(value=0)
+blue = tk.IntVar(value=0)
+
+# создать виджеты верхнего уровня
 mode_nb = ttk.Notebook()
 mode_nb.add(tab_absolute_mode(mode_nb), text='Абсолютный')
 mode_nb.add(tab_relative_mode(mode_nb), text='Относительный')
+btn_frame = frame_buttons()
 canvas = tk.Canvas()
 
-# если не указать вес, то он не растянет ячейки грида по ширине и высоте
-# даже если ряд всего один, вес указывать нужно
-for r in range(2): root.rowconfigure(index=r, weight=1)
-for c in range(2): root.columnconfigure(index=c, weight=1)
+# разместить виджеты верхнего уровня
+for r in range(2):
+    root.rowconfigure(index=r, weight=1)
+for c in range(2):
+    root.columnconfigure(index=c, weight=1)
 mode_nb.grid(row=0, column=0)
 btn_frame.grid(row=1, column=0)
 # sticky=nswe растягивает виджет на всю ячейку (с севера на юг и с запада
