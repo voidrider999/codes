@@ -1,4 +1,3 @@
-# TODO color picker (fg, bg)
 # TODO очистить канвас
 # TODO undo
 
@@ -16,6 +15,14 @@ def draw_absolute():
     x, y = int(turtle.xcor()), int(turtle.ycor())
     rgb = (red.get(), green.get(), blue.get())
     print(f'x:{x}, y:{y}, heading:{heading.get()}, RGB:{rgb}')
+
+def draw_relative(length_diff, heading_diff, red_diff, green_diff, blue_diff):
+    length.set(length.get() + length_diff)
+    heading.set((heading.get() + heading_diff) % 360)
+    red.set(min(red.get() + red_diff, 255))
+    green.set(min(green.get() + green_diff, 255))
+    blue.set(min(blue.get() + blue_diff, 255))
+    draw_absolute()
 
 def tab_absolute_mode(parent):
     frame = ttk.Frame(parent)
@@ -35,17 +42,17 @@ def tab_absolute_mode(parent):
         increment=5, command=on_heading_click)
     heading_sb.pack()
 
-    label = ttk.Label(frame, text='Red')
+    label = ttk.Label(frame, text='Красный')
     label.pack()
     red_sb = ttk.Spinbox(frame, textvariable=red, from_=0, to=255, increment=1)
     red_sb.pack()
 
-    label = ttk.Label(frame, text='Green')
+    label = ttk.Label(frame, text='Зеленый')
     label.pack()
     green_sb = ttk.Spinbox(frame, textvariable=green, from_=0, to=255, increment=1)
     green_sb.pack()
 
-    label = ttk.Label(frame, text='Blue')
+    label = ttk.Label(frame, text='Синий')
     label.pack()
     blue_sb = ttk.Spinbox(frame, textvariable=blue, from_=0, to=255, increment=1)
     blue_sb.pack()
@@ -73,31 +80,39 @@ def tab_relative_mode(parent):
     heading_sb.set(0)
     heading_sb.pack()
 
-    label = ttk.Label(frame, text='Red')
+    label = ttk.Label(frame, text='Красный')
     label.pack()
     red_sb = ttk.Spinbox(frame, from_=0, to=255, increment=1)
     red_sb.set(0)
     red_sb.pack()
 
-    label = ttk.Label(frame, text='Green')
+    label = ttk.Label(frame, text='Зеленый')
     label.pack()
     green_sb = ttk.Spinbox(frame, from_=0, to=255, increment=1)
     green_sb.set(0)
     green_sb.pack()
 
-    label = ttk.Label(frame, text='Blue')
+    label = ttk.Label(frame, text='Синий')
     label.pack()
     blue_sb = ttk.Spinbox(frame, from_=0, to=255, increment=1)
     blue_sb.set(0)
     blue_sb.pack()
 
+    label = ttk.Label(frame, text='Повторы')
+    label.pack()
+    repeat_sb = ttk.Spinbox(frame, from_=1, increment=1)
+    repeat_sb.set(1)
+    repeat_sb.pack()
+
     def on_draw_click():
-        length.set(length.get() + int(length_sb.get()))
-        heading.set((heading.get() + int(heading_sb.get())) % 360)
-        red.set((red.get() + int(red_sb.get())) % 256)
-        green.set((green.get() + int(green_sb.get())) % 256)
-        blue.set((blue.get() + int(blue_sb.get())) % 256)
-        draw_absolute()
+        for _ in range(int(repeat_sb.get())):
+            draw_relative(
+                int(length_sb.get()),
+                int(heading_sb.get()),
+                int(red_sb.get()),
+                int(green_sb.get()),
+                int(blue_sb.get()),
+            )
 
     draw_btn = ttk.Button(frame, text='Рисовать', command=on_draw_click)
     draw_btn.pack(pady=5)
