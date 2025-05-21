@@ -140,7 +140,7 @@ def frame_buttons():
         blue.set(int(b))
 
     undo_btn = ttk.Button(frame, text='Отменить', command=on_undo_click)
-    undo_btn.pack()
+    undo_btn.pack(pady=2)
 
     def on_clear_click():
         turtle.reset()
@@ -150,7 +150,7 @@ def frame_buttons():
         blue.set(0)
 
     clear_btn = ttk.Button(frame, text='Очистить', command=on_clear_click)
-    clear_btn.pack()
+    clear_btn.pack(pady=2)
 
     def on_save_click():
         canvas.update()
@@ -159,11 +159,12 @@ def frame_buttons():
         im.save('result.png')
 
     save_btn = ttk.Button(frame, text='Сохранить', command=on_save_click)
-    save_btn.pack()
+    save_btn.pack(pady=2)
 
     return frame
 
 root = tk.Tk()
+root.title('Turtle Draw')
 root.eval('tk::PlaceWindow . center')
 
 length = tk.IntVar(value=10)
