@@ -1,5 +1,3 @@
-# TODO очистить канвас
-
 import tkinter as tk
 from tkinter import ttk
 from turtle import RawTurtle
@@ -150,6 +148,14 @@ def frame_buttons():
 
     back_btn = ttk.Button(frame, text='Вернуться', command=on_back_click)
     back_btn.pack()
+
+    def on_clear_click():
+        canvas.delete('all')
+        global turtle
+        turtle = RawTurtle(canvas)
+
+    clear_btn = ttk.Button(frame, text='Очистить', command=on_clear_click)
+    clear_btn.pack()
 
     def on_undo_click():
         turtle.undo()
