@@ -4,7 +4,7 @@ from turtle import RawTurtle
 from PIL import Image
 from io import BytesIO
 
-def draw_absolute():
+def draw_manual():
     turtle.getscreen().colormode(255)
     turtle.pencolor((red.get(), green.get(), blue.get()))
     turtle.setheading(heading.get())
@@ -13,7 +13,7 @@ def draw_absolute():
     rgb = (red.get(), green.get(), blue.get())
     print(f'x:{x}, y:{y}, heading:{heading.get()}, RGB:{rgb}')
 
-def draw_relative(length_diff, heading_diff, red_diff, green_diff, blue_diff):
+def draw_repeat(length_diff, heading_diff, red_diff, green_diff, blue_diff):
     length.set(length.get() + length_diff)
     heading.set((heading.get() + heading_diff) % 360)
 
@@ -26,9 +26,9 @@ def draw_relative(length_diff, heading_diff, red_diff, green_diff, blue_diff):
     newb = min(blue.get() + blue_diff, 255)
     blue.set(max(newb, 0))
 
-    draw_absolute()
+    draw_manual()
 
-def tab_absolute_mode(parent):
+def tab_manual_mode(parent):
     frame = ttk.Frame(parent)
 
     label = ttk.Label(frame, text='Длина')
@@ -62,41 +62,41 @@ def tab_absolute_mode(parent):
     blue_sb.pack()
 
     def on_draw_click():
-        draw_absolute()
+        draw_manual()
 
     draw_btn = ttk.Button(frame, text='Рисовать', command=on_draw_click)
     draw_btn.pack(pady=5)
 
     return frame
 
-def tab_relative_mode(parent):
+def tab_repeat_mode(parent):
     frame = ttk.Frame(parent)
 
-    label = ttk.Label(frame, text='Длина')
+    label = ttk.Label(frame, text='Изменение длины')
     label.pack()
     length_sb = ttk.Spinbox(frame, from_=-100, to=100, increment=1)
     length_sb.set(0)
     length_sb.pack()
 
-    label = ttk.Label(frame, text='Поворот')
+    label = ttk.Label(frame, text='Изменение поворота')
     label.pack()
     heading_sb = ttk.Spinbox(frame, from_=-360, to=360, increment=5)
     heading_sb.set(0)
     heading_sb.pack()
 
-    label = ttk.Label(frame, text='Красный')
+    label = ttk.Label(frame, text='Изменение красного')
     label.pack()
     red_sb = ttk.Spinbox(frame, from_=-255, to=255, increment=1)
     red_sb.set(0)
     red_sb.pack()
 
-    label = ttk.Label(frame, text='Зеленый')
+    label = ttk.Label(frame, text='Изменение зеленого')
     label.pack()
     green_sb = ttk.Spinbox(frame, from_=-255, to=255, increment=1)
     green_sb.set(0)
     green_sb.pack()
 
-    label = ttk.Label(frame, text='Синий')
+    label = ttk.Label(frame, text='Изменение синего')
     label.pack()
     blue_sb = ttk.Spinbox(frame, from_=-255, to=255, increment=1)
     blue_sb.set(0)
@@ -110,7 +110,7 @@ def tab_relative_mode(parent):
 
     def on_draw_click():
         for _ in range(int(repeat_sb.get())):
-            draw_relative(
+            draw_repeat(
                 int(length_sb.get()),
                 int(heading_sb.get()),
                 int(red_sb.get()),
@@ -144,6 +144,7 @@ def frame_buttons():
 
     def on_clear_click():
         turtle.reset()
+        length.set(10)
         heading.set(0)
         red.set(0)
         green.set(0)
@@ -156,7 +157,7 @@ def frame_buttons():
         canvas.update()
         eps = canvas.postscript(colormode='color')
         im = Image.open(BytesIO(bytes(eps, 'ascii')))
-        im.save('result.png')
+        im.save('image.png')
 
     save_btn = ttk.Button(frame, text='Сохранить', command=on_save_click)
     save_btn.pack(pady=2)
@@ -175,8 +176,8 @@ blue = tk.IntVar(value=0)
 
 # создать виджеты верхнего уровня
 mode_nb = ttk.Notebook()
-mode_nb.add(tab_absolute_mode(mode_nb), text='Абсолютный')
-mode_nb.add(tab_relative_mode(mode_nb), text='Относительный')
+mode_nb.add(tab_manual_mode(mode_nb), text='Ручной')
+mode_nb.add(tab_repeat_mode(mode_nb), text='Повторы')
 btn_frame = frame_buttons()
 canvas = tk.Canvas()
 
