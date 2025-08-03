@@ -2,7 +2,7 @@ ships = {}
 while true do
     io.write("Введите название корабля: ")
     local ship = io.read()
-    if ship == "" then
+    if ship == "" or ship == nil then
         break
     end
     if ships[ship] == nil then
