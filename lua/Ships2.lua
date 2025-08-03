@@ -2,12 +2,11 @@ ships = {}
 while true do
     io.write("Введите название корабля: ")
     local ship = io.read()
-    if ship == "nil" then
+    if ship == "" then
         break
     end
-    if ships[ship] == n then
+    if ships[ship] == nil then
         ships[ship] = 1
-        print(ships)
     else
         ships[ship] = ships[ship] + 1
     end
