@@ -7,7 +7,7 @@ offices = {
 for _, office in ipairs(offices) do
     io.write(#office .. ": ")
     for _, person in ipairs(office) do
-    io.write(person .. " ")
+        io.write(person .. " ")
     end
     io.write("\n")
 end
